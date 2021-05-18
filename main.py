@@ -1,75 +1,27 @@
 import re
-from pprint import pprint
+from datetime import datetime
 
 def main():
     log_file = 'C:/Users/admin/Desktop/IoT/math/lab_5_fixed/log.txt'
     count = 0
+    time_format = '%d/%b/%Y:%H:%M:%S'
+    start_time = datetime.strptime("02/Mar/2004:09:14:56", time_format)
+    end_time = datetime.strptime("15/Mar/2004:12:11:55", time_format)
+
 
     with open(log_file, mode="r") as file:
-        text = file.read()
-        result1 = re.findall(r'\[02/Mar/2004:09:[1-5][4-9]:5[6-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result2 = re.findall(r'\[02/Mar/2004:09:[1-5][5-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result3 = re.findall(r'\[02/Mar/2004:1[0-9]:[0-5][0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result4 = re.findall(r'\[02/Mar/2004:2[0-4]:[0-5][0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result5 = re.findall(r'\[0[3-9]/Mar/2004:[0-1][0-9]:[0-5][0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result6 = re.findall(r'\[0[3-9]/Mar/2004:2[0-4]:[0-5][0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result7 = re.findall(r'\[15/Mar/2004:0[0-9]:[0-5][0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result8 = re.findall(r'\[15/Mar/2004:1[0-4]:[0-5][0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result9 = re.findall(r'\[15/Mar/2004:12:0[0-9]:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result10 = re.findall(r'\[15/Mar/2004:12:10:[0-5][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result11 = re.findall(r'\[15/Mar/2004:12:11:[0-4][0-9] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result12 = re.findall(r'\[15/Mar/2004:12:11:5[0-5] \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        #result100 = re.findall(r'\[\d\d/Mar/\d\d\d\d:\d\d:\d\d:\d\d \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
+        patern = re.compile(r".+ .+ .+ \[(\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2}).+\] \"GET (.+) HTTP.+")
+        for line in file:
+            match = patern.search(line)
+            if match:
+                timestamp = datetime.strptime(match.group(1), time_format)
+                if start_time < timestamp < end_time:
+                    print(line)
+                    count += 1
+                if timestamp > end_time:
+                    break
 
-        result1_1 = re.findall(r'\[02/Mar/2004:09:[1-5][4-9]:5[6-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result2_1 = re.findall(r'\[02/Mar/2004:09:[1-5][5-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result3_1 = re.findall(r'\[02/Mar/2004:1[0-9]:[0-5][0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result4_1 = re.findall(r'\[02/Mar/2004:2[0-4]:[0-5][0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result5_1 = re.findall(r'\[0[3-9]/Mar/2004:[0-1][0-9]:[0-5][0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result6_1 = re.findall(r'\[0[3-9]/Mar/2004:2[0-4]:[0-5][0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result7_1 = re.findall(r'\[15/Mar/2004:0[0-9]:[0-5][0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result8_1 = re.findall(r'\[15/Mar/2004:1[0-4]:[0-5][0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result9_1 = re.findall(r'\[15/Mar/2004:12:0[0-9]:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result10_1 = re.findall(r'\[15/Mar/2004:12:10:[0-5][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result11_1 = re.findall(r'\[15/Mar/2004:12:11:[0-4][0-9] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        result12_1 = re.findall(r'\[15/Mar/2004:12:11:5[0-5] \+0100] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-        #result100_1 = re.findall(r'\[\d\d/Mar/\d\d\d\d:\d\d:\d\d:\d\d \+0200] "GET /\w*/\w*/\w*\.\w* \w*/\d\.\d" 200', text)
-
-    result = []
-    result.extend(result1)
-    result.extend(result2)
-    result.extend(result3)
-    result.extend(result4)
-    result.extend(result5)
-    result.extend(result6)
-    result.extend(result7)
-    result.extend(result8)
-    result.extend(result9)
-    result.extend(result10)
-    result.extend(result11)
-    result.extend(result12)
-    #result.extend(result100)
-
-    result.extend(result1_1)
-    result.extend(result2_1)
-    result.extend(result3_1)
-    result.extend(result4_1)
-    result.extend(result5_1)
-    result.extend(result6_1)
-    result.extend(result7_1)
-    result.extend(result8_1)
-    result.extend(result9_1)
-    result.extend(result10_1)
-    result.extend(result11_1)
-    result.extend(result12_1)
-    #result.extend(result100_1)
-
-    for item in result:
-        count += 1
-        result.sort()
-
-    print(f"Accomplished GET requests: {count}")
-    pprint(result)
+        print(f"Accomplished GET requests: {count}")
 
 if __name__ == '__main__':
      main()
